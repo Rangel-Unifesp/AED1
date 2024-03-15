@@ -1,0 +1,87 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+int Ver_Col(int num, int grid[9][9], int Lin, int Col) {
+    int i;
+    for(i = 0; i < 9; i++) {
+        if(num == grid[i][Col] && Lin != i) { /* Verifica se o elemento da linha são diferente*/
+            return 0;
+        }
+        if(num < 1 || num > 9) { /* verifica se o numeero é menor que 1 ou maior que 9*/
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int Ver_Lin(int num, int grid[9][9], int Lin, int Col) {
+    int i;
+    for(i = 0; i < 9; i++) {
+        if(num == grid[Lin][i] && Col != i) { /* Verifica se o elemento da coluna são diferente*/
+            return 0;
+        }
+        if(num < 1 || num > 9) { /* verifica se o numeero é menor que 1 ou maior que 9*/
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int Ver_Bloc(int num, int grid[9][9], int Lin, int Col) {
+    int i, j, x0, y0, xf, yf;
+    x0 = Lin / 3 * 3;
+    y0 = Col / 3 * 3;
+    xf = x0 + 3;
+    yf = y0 + 3; /* percorem o bloco 3 por 3 dependendo da possição já que os numeros de 1 até 9 no ramo dos insteiros são 0,1,2, quando divididos por 3*/
+    for(i = x0; i < xf; i++) {
+        for(j = y0; j < yf; j++) {
+            if(num < 1 || num > 9) { /* verifica se o numeero é menor que 1 ou maior que 9*/
+                return 0;
+            }
+            if(num == grid[i][j] && i != Lin && j != Col) {/* Verifica se o numero é igual no quadrado 3 por 3 sem olhar ele mesmo*/
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+int Ver_Sudoku(int grid[9][9]) {
+    int num, i, j;
+    for(i = 0; i < 9; i++) {
+        for(j = 0; j < 9; j++) {
+            num = grid[i][j];
+            if(Ver_Col(num, grid, i, j) == 0) { /*Verifica a Coluna*/
+                return 0;
+            }
+            if(Ver_Lin(num, grid, i, j) == 0) { /*Verifica a Linha*/
+                return 0;
+            }
+            if(Ver_Bloc(num, grid, i, j) == 0) { /*Verifica os blocos 3 por 3*/
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+
+int main(void) {
+    int grid[9][9], i, j, k = 0, n;
+    scanf("%d", &n); /* lê o numero de instâncias*/
+    while(k < n) {
+        printf("Instancia %d\n", k + 1);
+        for(i = 0; i < 9; i++) {
+            for (j = 0; j < 9; j++) {
+                scanf("%d", &grid[i][j]);/* coloca os valores na matriz*/
+            }
+        }
+        if(Ver_Sudoku(grid) == 0) { /* verifica se o sudoku vale*/
+            printf("NAO\n\n");
+        } else {
+            printf("SIM\n\n");
+        }
+        k++;
+    }
+    return 0;
+}
